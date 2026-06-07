@@ -1,0 +1,86 @@
+"use server";
+
+import { redirect } from "next/navigation";
+import { createClient } from "@/lib/supabase/server";
+
+export async function signUp(prevState: { error?: string } | null, formData: FormData) {
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+  const handle = formData.get("handle") as string;
+
+  if (!handle || handle.length < 3) {
+    return { error: "Handle must be at least 3 characters." };
+  }
+
+  const supabase = await createClient();
+
+  // Check if handle is taken
+  const { data: existingHandle } = await supabase
+    .from("profiles")
+    .select("handle")
+    .eq("handle", handle)
+    .single();
+
+  if (existingHandle) {
+    return { error: "Handle is already taken." };
+  }
+
+  const { data, error } = await supabase.auth.signUp({
+    email,
+    password,
+    options: {
+      data: {
+        handle: handle,
+      },
+    },
+  });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  if (data.user) {
+    // Note: It's better to use a database trigger for this, 
+    // but keeping it here as requested for logic review.
+    const { error: profileError } = await supabase
+      .from("profiles")
+      .insert({
+        id: data.user.id,
+        email,
+        handle,
+      });
+
+    if (profileError) {
+      return { error: profileError.message };
+    }
+  }
+
+  redirect("/login");
+}
+
+export async function signIn(prevState: { error?: string } | null, formData: FormData) {
+  const email = formData.get("email") as string;
+  const password = formData.get("password") as string;
+
+  const supabase = await createClient();
+
+  const { error } =
+    await supabase.auth.signInWithPassword({
+      email,
+      password,
+    });
+
+  if (error) {
+    return { error: error.message };
+  }
+
+  redirect("/dashboard");
+}
+
+export async function signOut() {
+  const supabase = await createClient();
+
+  await supabase.auth.signOut();
+
+  redirect("/login");
+}
