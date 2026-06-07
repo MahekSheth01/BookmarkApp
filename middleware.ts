@@ -1,7 +1,10 @@
+
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
+  console.log("Middleware running:", request.nextUrl.pathname);
+
   let supabaseResponse = NextResponse.next({
     request,
   })
@@ -34,7 +37,7 @@ export async function middleware(request: NextRequest) {
   const {
     data: { user },
   } = await supabase.auth.getUser()
-
+console.log("User from middleware:", user?.email ?? "NO USER");
   if (
     !user &&
     request.nextUrl.pathname !== '/' &&
