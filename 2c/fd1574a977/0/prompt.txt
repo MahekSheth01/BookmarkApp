@@ -1,0 +1,5 @@
+Review my Supabase setup for a Next.js 15 App Router application.Files:- src/lib/supabase/client.ts- src/app/test/page.tsxCheck for:1. TypeScript issues2. Security concerns3. Supabase best practices4. Next.js App Router best practicesSuggest improvements but do not rewrite everything.
+
+---
+
+I agree with moving to @supabase/ssr.Before I implement it, what are the tradeoffs between my original client-only setup and the SSR-based setup for a bookmark application with authenticated dashboards and public profilesFocus on authentication, security, and user experience.
