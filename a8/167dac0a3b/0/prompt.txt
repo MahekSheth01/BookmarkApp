@@ -1,0 +1,1 @@
+I implemented authentication using Next.js Server Actions and Supabase SSR.Please review:1. Authentication flow2. Profile creation logic3. Handle uniqueness concerns4. Error handling5. Security issues Focus on production concerns and do not rewrite the feature completely
