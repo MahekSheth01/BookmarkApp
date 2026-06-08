@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-
+import { sendWelcomeEmail } from "@/lib/email";
 export async function signUp(prevState: { error?: string } | null, formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
@@ -58,10 +58,15 @@ if (!handleRegex.test(handle)) {
         handle,
       });
 
+      await sendWelcomeEmail(
+    email,
+    handle
+  );
     if (profileError) {
       return { error: profileError.message };
     }
   }
+
 
   redirect("/login");
 }
