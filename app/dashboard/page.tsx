@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/actions/auth";
-
+import BookmarkForm from "@/components/bookmark-form";
 export default async function DashboardPage() {
   const supabase = await createClient();
 
@@ -51,9 +51,11 @@ export default async function DashboardPage() {
           My Bookmarks
         </h2>
 
-        <p className="text-gray-500">
-          No bookmarks yet.
-        </p>
+        <BookmarkForm />
+
+<p className="text-gray-500">
+  No bookmarks yet.
+</p>
       </div>
     </main>
   );

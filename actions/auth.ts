@@ -8,9 +8,17 @@ export async function signUp(prevState: { error?: string } | null, formData: For
   const password = formData.get("password") as string;
   const handle = formData.get("handle") as string;
 
-  if (!handle || handle.length < 3) {
-    return { error: "Handle must be at least 3 characters." };
-  }
+  // if (!handle || handle.length < 3) {
+  //   return { error: "Handle must be at least 3 characters." };
+  // }
+  const handleRegex = /^[a-zA-Z0-9_]{3,20}$/;
+
+if (!handleRegex.test(handle)) {
+  return {
+    error:
+      "Handle must be 3-20 characters and contain only letters, numbers, and underscores.",
+  };
+}
 
   const supabase = await createClient();
 
