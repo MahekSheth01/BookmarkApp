@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/actions/auth";
 import BookmarkForm from "@/components/bookmark-form";
+import DeleteBookmarkButton from "@/components/delete-button";
 export default async function DashboardPage() {
   const supabase = await createClient();
 
@@ -94,8 +95,13 @@ export default async function DashboardPage() {
         >
           {bookmark.url}
         </a>
+         <DeleteBookmarkButton
+      id={bookmark.id}
+    />
       </div>
+      
     ))
+    
   )}
 </div>
       </div>
