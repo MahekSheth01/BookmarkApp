@@ -3,6 +3,7 @@ import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/actions/auth";
 import BookmarkForm from "@/components/bookmark-form";
 import DeleteBookmarkButton from "@/components/delete-button";
+import Link from "next/link";
 export default async function DashboardPage() {
   const supabase = await createClient();
 
@@ -94,7 +95,15 @@ export default async function DashboardPage() {
           className="text-blue-600 break-all"
         >
           {bookmark.url}
+
         </a>
+          <Link
+    href={`/dashboard/edit/${bookmark.id}`}
+    className="text-blue-600 text-sm"
+  >
+    Edit
+  </Link>
+
          <DeleteBookmarkButton
       id={bookmark.id}
     />
