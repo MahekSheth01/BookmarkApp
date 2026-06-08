@@ -19,6 +19,12 @@ export default async function DashboardPage() {
     .eq("id", user.id)
     .single();
 
+    const { data: bookmarks } = await supabase
+  .from("bookmarks")
+  .select("*")
+  .eq("user_id", user.id)
+  .order("created_at", { ascending: false });
+
   return (
     <main className="max-w-5xl mx-auto p-8">
       <div className="flex items-center justify-between mb-8">
@@ -53,9 +59,45 @@ export default async function DashboardPage() {
 
         <BookmarkForm />
 
-<p className="text-gray-500">
-  No bookmarks yet.
-</p>
+<div className="space-y-4">
+  {bookmarks?.length === 0 ? (
+    <p className="text-gray-500">
+      No bookmarks yet.
+    </p>
+  ) : (
+    bookmarks?.map((bookmark) => (
+      <div
+        key={bookmark.id}
+        className="border rounded-lg p-4"
+      >
+        <div className="flex justify-between items-center">
+          <h3 className="font-semibold">
+            {bookmark.title}
+          </h3>
+
+          <span
+            className={`text-sm px-2 py-1 rounded ${
+              bookmark.is_public
+                ? "bg-green-100"
+                : "bg-gray-100"
+            }`}
+          >
+            {bookmark.is_public ? "Public" : "Private"}
+          </span>
+        </div>
+
+        <a
+          href={bookmark.url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-blue-600 break-all"
+        >
+          {bookmark.url}
+        </a>
+      </div>
+    ))
+  )}
+</div>
       </div>
     </main>
   );
