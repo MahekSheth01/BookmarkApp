@@ -118,7 +118,7 @@ export default async function ProfilePage() {
               Public Profile URL
             </div>
             <div className="text-xs font-mono bg-slate-50 border border-slate-200 p-3 rounded-xl text-slate-700 break-all">
-              bookmarkhub.io/{profile?.handle}
+             https://bookmarkhub-indol.vercel.app/{profile?.handle}
             </div>
             <p className="text-[11px] text-slate-500 leading-relaxed">
               Anyone can visit this page to see your public bookmarks.
