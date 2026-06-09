@@ -46,26 +46,23 @@ export default async function DashboardPage() {
   const recentBookmarks = bookmarks?.slice(0, 5) || [];
 
   return (
-    <main className="container mx-auto p-4 sm:p-8 space-y-8">
-      {/* ── Page Header ── */}
+<main className="max-w-7xl mx-auto px-4 py-4 sm:px-6 sm:py-8 space-y-8">      {/* ── Page Header ── */}
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">
-            Welcome back! 👋
+<h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">            Welcome back! 👋
           </h1>
           <p className="text-slate-500">
             Here&apos;s what&apos;s happening with your collection.
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <Badge className="bg-slate-100 text-slate-700 hover:bg-slate-200 border-none py-1.5 px-4 h-fit font-medium">
+<div className="flex flex-col sm:flex-row gap-3 w-full md:w-auto">
+            <Badge className="bg-slate-100 text-slate-700 hover:bg-slate-200 border-none py-1.5 px-4 h-fit font-medium">
             <ShieldCheck className="w-4 h-4 mr-2 text-primary" />
             @{profile?.handle}
           </Badge>
           <Link
             href="/dashboard/add"
-            className="inline-flex items-center gap-2 rounded-full bg-primary hover:bg-primary/90 text-white px-5 py-2.5 text-sm font-bold shadow-sm transition-colors"
-          >
+className="inline-flex items-center justify-center gap-2 rounded-full bg-primary hover:bg-primary/90 text-white px-5 py-2.5 text-sm font-bold shadow-sm transition-colors w-full sm:w-auto"          >
             <PlusCircle className="w-4 h-4" />
             Add Bookmark
           </Link>
@@ -73,8 +70,8 @@ export default async function DashboardPage() {
       </div>
 
       {/* ── Stats ── */}
-      <div className="grid gap-5 md:grid-cols-3">
-        {/* Total */}
+<div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {/* Total */}
         <div className="bg-primary rounded-2xl p-6 text-white shadow-lg shadow-primary/20 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full blur-2xl translate-x-1/2 -translate-y-1/2" />
           <div className="flex items-center justify-between mb-4 relative z-10">
@@ -113,12 +110,10 @@ export default async function DashboardPage() {
       </div>
 
       {/* ── Main grid ── */}
-      <div className="grid gap-8 lg:grid-cols-[1fr_340px]">
-
+<div className="grid gap-8 xl:grid-cols-[1fr_340px]">
         {/* Recent bookmarks */}
         <div className="space-y-5">
-          <div className="flex items-center justify-between">
-            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
+<div className="flex flex-col sm:flex-row gap-3 sm:items-center sm:justify-between">            <h2 className="text-xl font-bold text-slate-900 flex items-center gap-2">
               <History className="w-5 h-5 text-slate-400" />
               Recent Activity
             </h2>
@@ -191,8 +186,7 @@ export default async function DashboardPage() {
                     <div className="flex items-center gap-2 shrink-0">
                       <Link
                         href={`/dashboard/edit/${bookmark.id}`}
-                        className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 text-xs font-semibold hover:bg-slate-50 hover:text-slate-900 transition-colors"
-                      >
+className="flex items-center justify-center gap-1.5 px-3 py-2 rounded-lg border border-slate-200 text-slate-600 text-xs font-semibold hover:bg-slate-50 hover:text-slate-900 transition-colors flex-1 sm:flex-none"                      >
                         <Edit3 className="w-3.5 h-3.5" />
                         Edit
                       </Link>
@@ -222,14 +216,12 @@ export default async function DashboardPage() {
               <p className="text-sm text-slate-500 leading-relaxed">
                 Your public bookmarks are live at:
               </p>
-              <div className="bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm font-mono text-slate-700 truncate">
-                https://bookmarkhub-indol.vercel.app/{profile?.handle}
+<div className="bg-slate-50 border border-slate-200 p-3 rounded-xl text-xs sm:text-sm font-mono text-slate-700 break-all">                https://bookmarkhub-indol.vercel.app/{profile?.handle}
               </div>
               <Link
                 href={`/${profile?.handle}`}
                 target="_blank"
-                className="flex items-center justify-center gap-2 w-full px-4 py-2.5 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 hover:bg-slate-50 transition-all"
-              >
+className="flex items-center justify-center gap-2 w-full px-4 py-3 rounded-xl border border-slate-200 text-sm font-bold text-slate-700 hover:bg-slate-50 transition-all"              >
                 View Public Profile
                 <ExternalLink className="w-4 h-4" />
               </Link>
