@@ -21,13 +21,16 @@ export default async function BookmarksPage() {
     .order("created_at", { ascending: false });
 
   return (
-    <main className="container mx-auto p-4 sm:p-8 space-y-8 animate-in fade-in duration-500">
+    <main className="container mx-auto p-4 sm:p-8 space-y-8 animate-fade-up">
+      {/* Page Header */}
       <div className="space-y-1">
-        <h1 className="text-3xl font-bold tracking-tight text-slate-900 flex items-center gap-3">
-          <ListMusic className="w-8 h-8 text-primary" />
+        <h1 className="text-3xl font-extrabold tracking-tight text-blue-950 flex items-center gap-3">
+          <div className="rounded-xl bg-blue-600 p-2 shadow-lg shadow-blue-200">
+            <ListMusic className="w-6 h-6 text-white" />
+          </div>
           My Bookmarks
         </h1>
-        <p className="text-muted-foreground">
+        <p className="text-blue-500">
           View and manage your entire collection of saved links.
         </p>
       </div>

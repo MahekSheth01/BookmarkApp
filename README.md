@@ -1,36 +1,61 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# BookmarkHub
 
-## Getting Started
+A simple, modern, and high-performance personal bookmark manager — think of it as a tiny "linktree meets pocket". Built for the EagerMinds Take-Home Build Task.
 
-First, run the development server:
+## Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- **Authentication:** Secure email and password login.
+- **Email Delivery:** New sign-ups receive confirmation emails (Powered by Brevo).
+- **Personal Vault:** Add, edit, and delete your bookmarks securely.
+- **Privacy First:** Strict database-level Row Level Security (RLS) ensures nobody can access your private data.
+- **Public Profiles:** Claim a unique `@handle` and share your public links with the world at `/<handle>`.
+- **Aesthetic UI:** Fully responsive, modern, and polished interface.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Framework:** Next.js (App Router)
+- **Language:** TypeScript
+- **Styling:** Tailwind CSS v4
+- **Database & Auth:** Supabase
+- **Email:** Brevo (used instead of Resend due to domain verification constraints)
+- **Deployment:** Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🚀 Running Locally
 
-To learn more about Next.js, take a look at the following resources:
+1. **Clone the repository:**
+   ```bash
+   git clone <your-repo-url>
+   cd bookmark-app
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+3. **Set up Environment Variables:**
+   Create a `.env.local` file in the root directory and add your Supabase credentials:
+   ```env
+   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+   ```
 
-## Deploy on Vercel
+4. **Start the development server:**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 🤖 AI Agent Workflow
+
+**Where the AI agent got something wrong, and how I caught and fixed it:**
+During development, the AI agent made two notable mistakes that required intervention. First, it configured CSS variables for the Tailwind v4 color theme incorrectly by dropping the `hsl()` wrapper, which caused backgrounds and buttons to render completely invisible (transparent). I caught this by noticing the missing UI elements on the dashboard and directed the agent to use explicit hex codes in the new Tailwind v4 `@theme` directive. Second, when setting up the bookmark deletion, the agent used the `deleteBookmark(id)` signature inside a React 19 `useActionState` hook. Since `useActionState` passes the previous state as the first argument, it resulted in a database crash (`invalid input syntax for type uuid: "null"`). I analyzed the crash logs, identified the signature mismatch, and had the agent rewrite the action to correctly extract the ID from the `formData`.
+
+## 💡 Future Improvements
+
+**One thing I'd improve with more time:**
+I would implement metadata scraping. When a user pastes a URL, the app would automatically fetch the OpenGraph tags (title, description, and preview image) in the background so the user doesn't have to manually type out the bookmark title, making the saving experience entirely frictionless.

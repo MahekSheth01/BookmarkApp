@@ -1,19 +1,17 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Search, 
-  Globe, 
-  Lock, 
-  ExternalLink, 
-  Edit3, 
-  Filter,
+import {
+  Search,
+  Globe,
+  Lock,
+  ExternalLink,
+  Edit3,
   BookmarkIcon,
-  X
+  X,
+  PlusCircle,
 } from "lucide-react";
 import Link from "next/link";
 import DeleteBookmarkButton from "./delete-button";
@@ -26,109 +24,138 @@ interface Bookmark {
   created_at: string;
 }
 
-export default function BookmarkList({ initialBookmarks }: { initialBookmarks: Bookmark[] }) {
+export default function BookmarkList({
+  initialBookmarks,
+}: {
+  initialBookmarks: Bookmark[];
+}) {
   const [search, setSearch] = useState("");
   const [filter, setFilter] = useState<"all" | "public" | "private">("all");
 
   const filteredBookmarks = initialBookmarks.filter((bookmark) => {
-    const matchesSearch = 
+    const matchesSearch =
       bookmark.title.toLowerCase().includes(search.toLowerCase()) ||
       bookmark.url.toLowerCase().includes(search.toLowerCase());
-    
-    const matchesFilter = 
-      filter === "all" || 
-      (filter === "public" && bookmark.is_public) || 
+
+    const matchesFilter =
+      filter === "all" ||
+      (filter === "public" && bookmark.is_public) ||
       (filter === "private" && !bookmark.is_public);
 
     return matchesSearch && matchesFilter;
   });
 
+  const filterTabs: { key: "all" | "public" | "private"; label: string }[] = [
+    { key: "all", label: `All (${initialBookmarks.length})` },
+    { key: "public", label: `Public (${initialBookmarks.filter((b) => b.is_public).length})` },
+    { key: "private", label: `Private (${initialBookmarks.filter((b) => !b.is_public).length})` },
+  ];
+
   return (
     <div className="space-y-6">
-      <div className="flex flex-col md:flex-row gap-4">
+      {/* ── Search + Filter bar ── */}
+      <div className="flex flex-col md:flex-row gap-3">
+        {/* Search */}
         <div className="relative flex-1">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+          <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
           <Input
-            placeholder="Search by title or URL..."
+            placeholder="Search by title or URL…"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="pl-10 h-11"
+            className="pl-10 h-11 border-slate-200 focus:border-primary focus:ring-primary rounded-xl bg-white placeholder:text-slate-400"
           />
           {search && (
-            <button 
+            <button
               onClick={() => setSearch("")}
               className="absolute right-3 top-1/2 -translate-y-1/2 p-1 hover:bg-slate-100 rounded-full transition-colors"
             >
-              <X className="w-3.5 h-3.5 text-muted-foreground" />
+              <X className="w-3.5 h-3.5 text-slate-400" />
             </button>
           )}
         </div>
-        <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-lg h-11">
-          <Button
-            variant={filter === "all" ? "secondary" : "ghost"}
-            size="sm"
-            onClick={() => setFilter("all")}
-            className={filter === "all" ? "bg-white shadow-sm" : ""}
-          >
-            All
-          </Button>
-          <Button
-            variant={filter === "public" ? "secondary" : "ghost"}
-            size="sm"
-            onClick={() => setFilter("public")}
-            className={filter === "public" ? "bg-white shadow-sm" : ""}
-          >
-            Public
-          </Button>
-          <Button
-            variant={filter === "private" ? "secondary" : "ghost"}
-            size="sm"
-            onClick={() => setFilter("private")}
-            className={filter === "private" ? "bg-white shadow-sm" : ""}
-          >
-            Private
-          </Button>
+
+        {/* Filter tabs */}
+        <div className="flex items-center gap-1 bg-slate-100 border border-slate-200 p-1 rounded-xl h-11 overflow-x-auto whitespace-nowrap">
+          {filterTabs.map(({ key, label }) => (
+            <button
+              key={key}
+              onClick={() => setFilter(key)}
+              className={`px-4 py-1.5 rounded-lg text-sm font-semibold transition-all duration-200 ${
+                filter === key
+                  ? "bg-white text-slate-900 shadow-sm border border-slate-200"
+                  : "text-slate-500 hover:text-slate-900 hover:bg-slate-200/50 border border-transparent"
+              }`}
+            >
+              {label}
+            </button>
+          ))}
         </div>
       </div>
 
-      <div className="grid gap-4">
+      {/* ── Results summary ── */}
+      {filteredBookmarks.length > 0 && (
+        <p className="text-sm text-slate-500">
+          Showing <span className="font-semibold text-slate-900">{filteredBookmarks.length}</span>{" "}
+          {filteredBookmarks.length === 1 ? "bookmark" : "bookmarks"}
+          {search && ` for "${search}"`}
+        </p>
+      )}
+
+      {/* ── List ── */}
+      <div className="grid gap-3">
         {filteredBookmarks.length === 0 ? (
-          <Card className="border-dashed py-16">
-            <CardContent className="flex flex-col items-center justify-center text-center space-y-4">
-              <div className="rounded-full bg-slate-100 p-6">
+          <div className="bg-white rounded-2xl border-2 border-dashed border-slate-200 py-16 text-center space-y-4">
+            <div className="flex justify-center">
+              <div className="rounded-full bg-slate-50 p-5">
                 <BookmarkIcon className="h-10 w-10 text-slate-300" />
               </div>
-              <div className="space-y-1">
-                <p className="font-bold text-lg text-slate-900">No bookmarks found</p>
-                <p className="text-sm text-muted-foreground max-w-xs mx-auto">
-                  {search 
-                    ? `We couldn't find any results for "${search}" with the current filter.`
-                    : "Your collection is empty. Start adding some links!"}
-                </p>
-              </div>
-              {search && (
-                <Button variant="outline" onClick={() => {setSearch(""); setFilter("all");}}>
-                  Clear search & filters
-                </Button>
-              )}
-            </CardContent>
-          </Card>
+            </div>
+            <div className="space-y-1">
+              <p className="font-bold text-lg text-slate-900">No bookmarks found</p>
+              <p className="text-sm text-slate-500 max-w-xs mx-auto">
+                {search
+                  ? `No results for "${search}" with the current filter.`
+                  : "Your collection is empty. Start adding some links!"}
+              </p>
+            </div>
+            {search ? (
+              <button
+                onClick={() => { setSearch(""); setFilter("all"); }}
+                className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full border border-slate-200 text-sm font-semibold text-slate-700 hover:bg-slate-50 hover:text-slate-900 transition-all"
+              >
+                <X className="w-4 h-4" />
+                Clear filters
+              </button>
+            ) : (
+              <Link
+                href="/dashboard/add"
+                className="inline-flex items-center gap-2 bg-primary hover:bg-primary/90 rounded-full px-6 py-2.5 text-sm font-bold text-white transition-colors"
+              >
+                <PlusCircle className="w-4 h-4" />
+                Add Bookmark
+              </Link>
+            )}
+          </div>
         ) : (
           filteredBookmarks.map((bookmark) => (
-            <Card key={bookmark.id} className="group overflow-hidden hover:border-primary/50 transition-all hover:shadow-md">
+            <div
+              key={bookmark.id}
+              className="group bg-white rounded-2xl border border-slate-200 hover:border-slate-300 hover:shadow-sm transition-all duration-200"
+            >
               <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 gap-4">
-                <div className="space-y-1.5 flex-1">
+                {/* Left: info */}
+                <div className="space-y-1.5 flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <h3 className="font-bold text-lg group-hover:text-primary transition-colors">
+                    <h3 className="font-bold text-slate-900 group-hover:text-primary transition-colors truncate">
                       {bookmark.title}
                     </h3>
                     {bookmark.is_public ? (
-                      <Badge variant="outline" className="text-green-600 border-green-200 bg-green-50/50">
+                      <Badge className="bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border-none text-xs font-semibold shrink-0">
                         <Globe className="w-3 h-3 mr-1" />
                         Public
                       </Badge>
                     ) : (
-                      <Badge variant="outline" className="text-amber-600 border-amber-200 bg-amber-50/50">
+                      <Badge className="bg-slate-100 text-slate-600 hover:bg-slate-200 border-none text-xs font-semibold shrink-0">
                         <Lock className="w-3 h-3 mr-1" />
                         Private
                       </Badge>
@@ -138,24 +165,33 @@ export default function BookmarkList({ initialBookmarks }: { initialBookmarks: B
                     href={bookmark.url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="text-sm text-muted-foreground flex items-center gap-1.5 hover:text-primary transition-colors break-all"
+                    className="text-sm text-slate-500 flex items-center gap-1.5 hover:text-primary transition-colors break-all"
                   >
                     <ExternalLink className="w-3.5 h-3.5 shrink-0" />
                     {bookmark.url}
                   </a>
+                  <p className="text-[11px] text-slate-400">
+                    {new Date(bookmark.created_at).toLocaleDateString("en-US", {
+                      year: "numeric",
+                      month: "short",
+                      day: "numeric",
+                    })}
+                  </p>
                 </div>
-                
-                <div className="flex items-center gap-2 border-t pt-4 sm:border-t-0 sm:pt-0 sm:pl-4">
-                  <Button variant="outline" size="sm" asChild className="h-9 shadow-sm">
-                    <Link href={`/dashboard/edit/${bookmark.id}`}>
-                      <Edit3 className="w-4 h-4 mr-2" />
-                      Edit
-                    </Link>
-                  </Button>
+
+                {/* Right: actions */}
+                <div className="flex items-center gap-2 shrink-0 border-t border-slate-100 pt-4 sm:border-t-0 sm:pt-0 sm:border-l sm:pl-5">
+                  <Link
+                    href={`/dashboard/edit/${bookmark.id}`}
+                    className="flex items-center gap-1.5 px-3 py-2 rounded-xl border border-slate-200 text-slate-600 text-xs font-semibold hover:bg-slate-50 hover:text-slate-900 transition-all"
+                  >
+                    <Edit3 className="w-3.5 h-3.5" />
+                    Edit
+                  </Link>
                   <DeleteBookmarkButton id={bookmark.id} />
                 </div>
               </div>
-            </Card>
+            </div>
           ))
         )}
       </div>

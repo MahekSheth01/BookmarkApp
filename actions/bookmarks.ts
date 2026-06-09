@@ -49,7 +49,8 @@ export async function createBookmark(
   return { success: true };
 }
 
-export async function deleteBookmark(id: string) {
+export async function deleteBookmark(prevState: any, formData: FormData) {
+  const id = formData.get("id") as string;
   const supabase = await createClient();
 
   const {
