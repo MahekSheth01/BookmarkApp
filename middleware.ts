@@ -1,10 +1,7 @@
-
 import { createServerClient } from '@supabase/ssr'
 import { NextResponse, type NextRequest } from 'next/server'
 
 export async function middleware(request: NextRequest) {
-  console.log("Middleware running:", request.nextUrl.pathname);
-
   let supabaseResponse = NextResponse.next({
     request,
   })
@@ -30,44 +27,36 @@ export async function middleware(request: NextRequest) {
     }
   )
 
-  // IMPORTANT: Avoid writing any logic between createServerClient and
-  // supabase.auth.getUser(). A simple mistake can make it very hard to debug
-  // issues with users being randomly logged out.
-
+  // IMPORTANT: Do not remove this call. It refreshes the session if expired.
   const {
     data: { user },
   } = await supabase.auth.getUser()
-console.log("User from middleware:", user?.email ?? "NO USER");
-  if (
-    !user &&
-    request.nextUrl.pathname !== '/' &&
-    !request.nextUrl.pathname.startsWith('/login') &&
-    !request.nextUrl.pathname.startsWith('/signup') &&
-    !request.nextUrl.pathname.startsWith('/auth')
-  ) {
-    // no user, potentially respond by redirecting the user to the login page
+
+  const pathname = request.nextUrl.pathname
+
+  // Protect /dashboard and its sub-routes
+  if (!user && pathname.startsWith('/dashboard')) {
     const url = request.nextUrl.clone()
     url.pathname = '/login'
+    // Optional: add a redirect query param to bring them back after login
+    url.searchParams.set('next', pathname)
     return NextResponse.redirect(url)
   }
 
-  // IMPORTANT: You *must* return the supabaseResponse object as it is. If you're
-  // creating a new response object with NextResponse.next() make sure to:
-  // 1. Pass the request in it, like so:
-  //    const myNewResponse = NextResponse.next({ request })
-  // 2. Copy over the cookies, like so:
-  //    myNewResponse.cookies.setAll(supabaseResponse.cookies.getAll())
-  // 3. Change the myNewResponse object to fit your needs, but avoid changing
-  //    the cookies!
-  // 4. Finally: return myNewResponse
-  // If this is not done, you may be causing the browser and server to go out
-  // of sync and terminate the user's session prematurely!
-
+  // Allow all other routes (/, /login, /signup, /[handle]) to fall through
   return supabaseResponse
 }
 
 export const config = {
- matcher: [
-  '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
-]
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next/static (static files)
+     * - _next/image (image optimization files)
+     * - favicon.ico (favicon file)
+     * - Any file with a common image/media extension
+     */
+    '/((?!api|_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)',
+  ],
 }
