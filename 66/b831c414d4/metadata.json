@@ -1,0 +1,23 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "66b831c414d4",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "app/[handle]/page.tsx",
+    "app/dashboard/page.tsx",
+    "components/bookmark-form.tsx",
+    "components/navbar.tsx",
+    "package-lock.json",
+    "package.json"
+  ],
+  "sessions": [
+    {
+      "metadata": "/66/b831c414d4/0/metadata.json",
+      "transcript": "/66/b831c414d4/0/full.jsonl",
+      "content_hash": "/66/b831c414d4/0/content_hash.txt",
+      "prompt": "/66/b831c414d4/0/prompt.txt"
+    }
+  ]
+}
