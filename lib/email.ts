@@ -11,7 +11,7 @@ export async function sendWelcomeEmail(
   try {
     const result = await client.transactionalEmails.sendTransacEmail({
       sender: {
-        email: "maheksheth77@gmail.com",
+        email: process.env.BREVO_SENDER_EMAIL,
         name: "Bookmark App",
       },
       to: [
