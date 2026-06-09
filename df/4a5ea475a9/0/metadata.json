@@ -1,0 +1,40 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "df4a5ea475a9",
+  "session_id": "62abdc93-7681-4600-97bc-a10ef6ddf692",
+  "strategy": "manual-commit",
+  "created_at": "2026-06-09T14:22:16.9895341Z",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "app/[handle]/page.tsx",
+    "app/dashboard/edit/[id]/page.tsx",
+    "app/dashboard/page.tsx",
+    "app/globals.css",
+    "app/layout.tsx",
+    "app/login/page.tsx",
+    "app/page.tsx",
+    "app/signup/page.tsx",
+    "components/bookmark-form.tsx",
+    "components/delete-button.tsx",
+    "components/navbar.tsx"
+  ],
+  "agent": "Gemini CLI",
+  "model": "gemini-3-flash-preview",
+  "turn_id": "29cfd4d21043",
+  "session_metrics": {
+    "turn_count": 2
+  },
+  "initial_attribution": {
+    "calculated_at": "2026-06-09T14:22:16.8519675Z",
+    "agent_lines": 0,
+    "agent_removed": 683,
+    "human_added": 611,
+    "human_modified": 1285,
+    "human_removed": 0,
+    "total_committed": 1896,
+    "total_lines_changed": 2817,
+    "agent_percentage": 24.245651402200924,
+    "metric_version": 2
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "df4a5ea475a9",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "app/[handle]/page.tsx",
+    "app/dashboard/edit/[id]/page.tsx",
+    "app/dashboard/page.tsx",
+    "app/globals.css",
+    "app/layout.tsx",
+    "app/login/page.tsx",
+    "app/page.tsx",
+    "app/signup/page.tsx",
+    "components/bookmark-form.tsx",
+    "components/delete-button.tsx",
+    "components/navbar.tsx"
+  ],
+  "sessions": [
+    {
+      "metadata": "/df/4a5ea475a9/0/metadata.json",
+      "transcript": "/df/4a5ea475a9/0/full.jsonl",
+      "content_hash": "/df/4a5ea475a9/0/content_hash.txt",
+      "prompt": "/df/4a5ea475a9/0/prompt.txt"
+    }
+  ]
+}
