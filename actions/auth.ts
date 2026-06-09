@@ -13,12 +13,12 @@ export async function signUp(prevState: { error?: string } | null, formData: For
   // }
   const handleRegex = /^[a-zA-Z0-9_]{3,20}$/;
 
-if (!handleRegex.test(handle)) {
-  return {
-    error:
-      "Handle must be 3-20 characters and contain only letters, numbers, and underscores.",
-  };
-}
+  if (!handleRegex.test(handle)) {
+    return {
+      error:
+        "Handle must be 3-20 characters and contain only letters, numbers, and underscores.",
+    };
+  }
 
   const supabase = await createClient();
 
@@ -58,10 +58,11 @@ if (!handleRegex.test(handle)) {
         handle,
       });
 
-      await sendWelcomeEmail(
-    email,
-    handle
-  );
+    try {
+      await sendWelcomeEmail(email, handle);
+    } catch (error) {
+      console.error("Welcome email failed:", error);
+    }
     if (profileError) {
       return { error: profileError.message };
     }
