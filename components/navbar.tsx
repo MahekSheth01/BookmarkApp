@@ -58,9 +58,8 @@ export default function Navbar({ initialUser }: { initialUser: any }) {
 
   return (
     <nav
-      className={`sticky top-0 z-50 w-full transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-slate-200 ${
-        scrolled ? "shadow-sm" : ""
-      }`}
+      className={`sticky top-0 z-50 w-full transition-all duration-300 bg-white/80 backdrop-blur-md border-b border-slate-200 ${scrolled ? "shadow-sm" : ""
+        }`}
     >
       <div className="container mx-auto px-4 sm:px-8">
         <div className="flex h-16 items-center justify-between">
@@ -83,11 +82,10 @@ export default function Navbar({ initialUser }: { initialUser: any }) {
                   <Link
                     key={link.href}
                     href={link.href}
-                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
-                      isActive(link.href)
+                    className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${isActive(link.href)
                         ? "bg-primary/10 text-primary"
                         : "text-slate-600 hover:text-slate-900 hover:bg-slate-100"
-                    }`}
+                      }`}
                   >
                     <link.icon className="w-4 h-4" />
                     {link.label}
@@ -161,11 +159,10 @@ export default function Navbar({ initialUser }: { initialUser: any }) {
                     key={link.href}
                     href={link.href}
                     onClick={closeMenu}
-                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
-                      isActive(link.href)
+                    className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${isActive(link.href)
                         ? "bg-primary/10 text-primary"
                         : "text-slate-600 hover:bg-slate-100 hover:text-slate-900"
-                    }`}
+                      }`}
                   >
                     <link.icon className="w-5 h-5" />
                     {link.label}
@@ -175,8 +172,7 @@ export default function Navbar({ initialUser }: { initialUser: any }) {
                   <form action={signOut} className="w-full">
                     <button
                       type="submit"
-                      onClick={closeMenu}
-                      className="flex w-full items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/10 transition-all"
+                      className="flex w-full items-center gap-3 min-h-[48px] px-4 py-3 rounded-xl text-sm font-medium text-destructive hover:bg-destructive/10 transition-all"
                     >
                       <LogOut className="h-5 w-5" />
                       Logout
