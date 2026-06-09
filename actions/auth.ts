@@ -24,7 +24,7 @@ if (!handleRegex.test(handle)) {
 
   // Check if handle is taken
   const { data: existingHandle } = await supabase
-    .from("profiles")
+    .from("public_profiles")
     .select("handle")
     .eq("handle", handle)
     .single();
@@ -51,7 +51,7 @@ if (!handleRegex.test(handle)) {
     // Note: It's better to use a database trigger for this, 
     // but keeping it here as requested for logic review.
     const { error: profileError } = await supabase
-      .from("profiles")
+      .from("public_profiles")
       .insert({
         id: data.user.id,
         email,

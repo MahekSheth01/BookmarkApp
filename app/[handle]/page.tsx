@@ -14,7 +14,7 @@ export default async function PublicProfilePage({ params }: Props) {
   const supabase = await createClient();
 
   const { data: profile } = await supabase
-    .from("profiles")
+    .from("public_profiles")
     .select("id, handle")
     .eq("handle", handle)
     .maybeSingle();

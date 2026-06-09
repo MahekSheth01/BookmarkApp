@@ -23,8 +23,10 @@ export default function UserSearch() {
     const fetchUsers = async () => {
       setLoading(true);
 
-      let dbQuery = supabase.from("profiles").select("id, handle");
-
+      let dbQuery = supabase
+        .from("public_profiles")
+        .select("id, handle");
+        
       if (query) {
         dbQuery = dbQuery.ilike("handle", `%${query}%`);
       }
