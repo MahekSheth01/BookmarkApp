@@ -1,6 +1,5 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import BookmarkForm from "@/components/bookmark-form";
 import DeleteBookmarkButton from "@/components/delete-button";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -12,10 +11,11 @@ import {
   Lock, 
   ExternalLink, 
   Edit3, 
-  Search, 
-  Inbox,
   LayoutGrid,
-  ShieldCheck
+  ShieldCheck,
+  PlusCircle,
+  History,
+  ArrowRight
 } from "lucide-react";
 
 export default async function DashboardPage() {
@@ -44,27 +44,34 @@ export default async function DashboardPage() {
   const totalBookmarks = bookmarks?.length || 0;
   const publicBookmarks = bookmarks?.filter(b => b.is_public).length || 0;
   const privateBookmarks = totalBookmarks - publicBookmarks;
+  const recentBookmarks = bookmarks?.slice(0, 5) || [];
 
   return (
     <main className="container mx-auto p-4 sm:p-8 space-y-8 animate-in fade-in duration-500">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="space-y-1">
-          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Dashboard</h1>
+          <h1 className="text-3xl font-bold tracking-tight text-slate-900">Welcome back!</h1>
           <p className="text-muted-foreground">
-            Manage your personal library of saved links.
+            Here's what's happening with your collection.
           </p>
         </div>
-        <div className="flex items-center gap-2 bg-slate-100 p-1 rounded-lg self-start">
-          <Badge variant="secondary" className="bg-white shadow-sm py-1 px-3">
-            <ShieldCheck className="w-3 h-3 mr-1.5 text-primary" />
+        <div className="flex items-center gap-3">
+          <Badge variant="secondary" className="bg-slate-100 shadow-sm py-1.5 px-4 h-fit">
+            <ShieldCheck className="w-3.5 h-3.5 mr-2 text-primary" />
             @{profile?.handle}
           </Badge>
+          <Button asChild className="rounded-full shadow-lg shadow-primary/20">
+            <Link href="/dashboard/add">
+              <PlusCircle className="w-4 h-4 mr-2" />
+              Add Bookmark
+            </Link>
+          </Button>
         </div>
       </div>
 
       {/* Stats Section */}
       <div className="grid gap-4 md:grid-cols-3">
-        <Card className="shadow-sm hover:shadow-md transition-shadow">
+        <Card className="shadow-sm hover:shadow-md transition-shadow border-t-4 border-t-primary">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Total Bookmarks</CardTitle>
             <BookmarkIcon className="h-4 w-4 text-primary" />
@@ -74,7 +81,7 @@ export default async function DashboardPage() {
             <p className="text-xs text-muted-foreground mt-1">Saved across all time</p>
           </CardContent>
         </Card>
-        <Card className="shadow-sm hover:shadow-md transition-shadow border-l-4 border-l-green-500">
+        <Card className="shadow-sm hover:shadow-md transition-shadow border-t-4 border-t-green-500">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Public Links</CardTitle>
             <Globe className="h-4 w-4 text-green-500" />
@@ -84,7 +91,7 @@ export default async function DashboardPage() {
             <p className="text-xs text-muted-foreground mt-1">Visible on your profile</p>
           </CardContent>
         </Card>
-        <Card className="shadow-sm hover:shadow-md transition-shadow border-l-4 border-l-amber-500">
+        <Card className="shadow-sm hover:shadow-md transition-shadow border-t-4 border-t-amber-500">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium text-muted-foreground">Private Vault</CardTitle>
             <Lock className="h-4 w-4 text-amber-500" />
@@ -96,53 +103,41 @@ export default async function DashboardPage() {
         </Card>
       </div>
 
-      <div className="grid gap-8 lg:grid-cols-[400px_1fr]">
+      <div className="grid gap-8 lg:grid-cols-[1fr_350px]">
         <div className="space-y-6">
-          <BookmarkForm />
-          
-          <Card className="bg-primary/5 border-primary/10 hidden lg:block">
-            <CardHeader>
-              <CardTitle className="text-sm flex items-center gap-2">
-                <Inbox className="w-4 h-4 text-primary" />
-                Quick Tip
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="text-xs text-muted-foreground leading-relaxed">
-              Public bookmarks are listed on your profile at <strong>bookmarkhub.io/{profile?.handle}</strong>. 
-              Share your profile to showcase your curated links!
-            </CardContent>
-          </Card>
-        </div>
-
-        <div className="space-y-4">
           <div className="flex items-center justify-between">
             <h2 className="text-xl font-bold flex items-center gap-2">
-              <LayoutGrid className="w-5 h-5 text-primary" />
-              Your Collection
+              <History className="w-5 h-5 text-primary" />
+              Recent Activity
             </h2>
-            <div className="flex items-center gap-2 text-sm text-muted-foreground bg-slate-50 px-3 py-1.5 rounded-full border">
-              <Search className="w-4 h-4" />
-              <span>Search coming soon</span>
-            </div>
+            <Button variant="ghost" size="sm" asChild className="text-primary hover:text-primary hover:bg-primary/5">
+              <Link href="/dashboard/bookmarks">
+                View All
+                <ArrowRight className="w-4 h-4 ml-1" />
+              </Link>
+            </Button>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-1">
-            {totalBookmarks === 0 ? (
+          <div className="grid gap-4">
+            {recentBookmarks.length === 0 ? (
               <Card className="border-dashed py-12">
                 <CardContent className="flex flex-col items-center justify-center text-center space-y-3">
                   <div className="rounded-full bg-slate-100 p-4">
                     <BookmarkIcon className="h-8 w-8 text-slate-300" />
                   </div>
                   <div className="space-y-1">
-                    <p className="font-medium">No bookmarks yet</p>
+                    <p className="font-medium">Your collection is empty</p>
                     <p className="text-sm text-muted-foreground max-w-xs">
-                      Start building your collection by adding your first link using the form.
+                      Start by adding your first bookmark to see it here.
                     </p>
+                    <Button asChild variant="outline" className="mt-4">
+                      <Link href="/dashboard/add">Add First Bookmark</Link>
+                    </Button>
                   </div>
                 </CardContent>
               </Card>
             ) : (
-              bookmarks?.map((bookmark) => (
+              recentBookmarks.map((bookmark) => (
                 <Card key={bookmark.id} className="group overflow-hidden hover:border-primary/50 transition-colors shadow-sm">
                   <div className="flex flex-col sm:flex-row sm:items-center justify-between p-5 gap-4">
                     <div className="space-y-1 flex-1">
@@ -188,7 +183,33 @@ export default async function DashboardPage() {
             )}
           </div>
         </div>
+
+        <div className="space-y-6">
+          <Card className="bg-primary/5 border-primary/10 overflow-hidden">
+            <div className="h-24 bg-primary/10 flex items-center justify-center">
+              <LayoutGrid className="w-12 h-12 text-primary/20" />
+            </div>
+            <CardHeader>
+              <CardTitle className="text-lg">Public Profile</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                Your public bookmarks are live at:
+              </p>
+              <div className="bg-white p-3 rounded-lg border text-sm font-mono truncate">
+                bookmarkhub.io/{profile?.handle}
+              </div>
+              <Button asChild className="w-full" variant="outline">
+                <Link href={`/${profile?.handle}`} target="_blank">
+                  View Public Profile
+                  <ExternalLink className="w-4 h-4 ml-2" />
+                </Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </main>
   );
 }
+
