@@ -22,13 +22,13 @@ export default function Home() {
 
             <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-4 py-1.5 text-sm font-semibold text-slate-700 shadow-sm">
               <Zap className="h-4 w-4 text-primary" />
-              <span>Redesigned for 2025 &mdash; faster &amp; smarter</span>
+              <span>Save. Organise. Share. &mdash; faster &amp; smarter</span>
             </div>
 
             <h1 className="text-5xl font-extrabold tracking-tight sm:text-7xl text-slate-900 leading-tight">
-              Organise your digital life{" "}
+              One place for every link .{" "}
               <span className="text-primary">
-                beautifully
+                worth keeping
               </span>
             </h1>
 

@@ -51,7 +51,7 @@ if (!handleRegex.test(handle)) {
     // Note: It's better to use a database trigger for this, 
     // but keeping it here as requested for logic review.
     const { error: profileError } = await supabase
-      .from("public_profiles")
+      .from("profiles")
       .insert({
         id: data.user.id,
         email,
