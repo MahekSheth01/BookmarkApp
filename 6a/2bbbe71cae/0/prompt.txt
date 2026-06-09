@@ -1,0 +1,9 @@
+Review my bookmark application for production readiness.Focus on:1. Authentication and authorization security2. Supabase RLS policies3. Public profile privacy4. Email integration (Brevo)5. Dashboard protection6. Potential bugs or edge cases7. Database design improvements8. Things that would fail in productionPlease provide:* Severity (High / Medium / Low)* Why it is a problem* Recommended fixDo not rewrite the entire application. Only identify real issues and improvements.
+
+---
+
+You identified that my middleware is blocking public profile routes such as /mahu for logged-out users.Please review my current middleware.ts and provide the safest fix so that:* / remains public* /login remains public* /signup remains public* /auth/* remains public* /[handle] public profile pages remain public* /dashboard and other authenticated pages remain protectedPlease explain the routing logic and generate the updated middleware code.
+
+---
+
+Review my current middleware and apply the minimum changes required to:- Keep /dashboard protected- Keep /login and /signup public- Allow public access to /[handle] profile pages- Preserve existing Supabase SSR session handlingPlease explain why each change is necessary and then update the code.
