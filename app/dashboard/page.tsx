@@ -223,7 +223,7 @@ export default async function DashboardPage() {
                 Your public bookmarks are live at:
               </p>
               <div className="bg-slate-50 border border-slate-200 p-3 rounded-xl text-sm font-mono text-slate-700 truncate">
-                bookmarkhub.io/{profile?.handle}
+                https://bookmarkhub-indol.vercel.app/{profile?.handle}
               </div>
               <Link
                 href={`/${profile?.handle}`}
