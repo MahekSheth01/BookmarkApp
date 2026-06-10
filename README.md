@@ -152,8 +152,6 @@ Given more time, I would implement:
 * Bookmark categories and tagging
 * Bookmark preview cards using OpenGraph metadata
 * Drag-and-drop bookmark organization
-* Bookmark analytics for public profiles
-* Advanced search and filtering
 
 ---
 
