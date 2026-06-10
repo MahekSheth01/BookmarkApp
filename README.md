@@ -1,61 +1,182 @@
 # BookmarkHub
 
-A simple, modern, and high-performance personal bookmark manager — think of it as a tiny "linktree meets pocket". Built for the EagerMinds Take-Home Build Task.
+A modern, responsive, and secure personal bookmark manager — a lightweight blend of Linktree and Pocket. Built as part of the EagerMinds Software Developer Take-Home Assignment.
+
+## Live Demo
+
+**Live URL:** https://bookmarkhub-indol.vercel.app/
+
+**GitHub Repository:** https://github.com/MahekSheth01/BookmarkApp
+
+---
 
 ## Features
 
-- **Authentication:** Secure email and password login.
-- **Email Delivery:** New sign-ups receive confirmation emails (Powered by Brevo).
-- **Personal Vault:** Add, edit, and delete your bookmarks securely.
-- **Privacy First:** Strict database-level Row Level Security (RLS) ensures nobody can access your private data.
-- **Public Profiles:** Claim a unique `@handle` and share your public links with the world at `/<handle>`.
-- **Aesthetic UI:** Fully responsive, modern, and polished interface.
+* Secure email/password authentication
+* Welcome email sent on successful signup (Brevo)
+* Create, edit, and delete bookmarks
+* Public and private bookmark visibility
+* Unique public profiles using custom `@handles`
+* User discovery and profile search
+* Protected dashboard routes
+* Responsive and modern UI
+* Database-level security using Supabase Row Level Security (RLS)
+
+---
 
 ## Tech Stack
 
-- **Framework:** Next.js (App Router)
-- **Language:** TypeScript
-- **Styling:** Tailwind CSS v4
-- **Database & Auth:** Supabase
-- **Email:** Brevo (used instead of Resend due to domain verification constraints)
-- **Deployment:** Vercel
+| Technology           | Purpose                   |
+| -------------------- | ------------------------- |
+| Next.js (App Router) | Frontend & Backend        |
+| TypeScript           | Type Safety               |
+| Tailwind CSS v4      | Styling                   |
+| Supabase             | Authentication & Database |
+| Brevo                | Transactional Emails      |
+| Vercel               | Deployment                |
 
 ---
 
-## 🚀 Running Locally
+## Running Locally
 
-1. **Clone the repository:**
-   ```bash
-   git clone <your-repo-url>
-   cd bookmark-app
-   ```
+### 1. Clone the Repository
 
-2. **Install dependencies:**
-   ```bash
-   npm install
-   ```
+```bash
+git clone https://github.com/MahekSheth01/BookmarkApp.git
+cd BookmarkApp
+```
 
-3. **Set up Environment Variables:**
-   Create a `.env.local` file in the root directory and add your Supabase credentials:
-   ```env
-   NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-   ```
+### 2. Install Dependencies
 
-4. **Start the development server:**
-   ```bash
-   npm run dev
-   ```
-   Open [http://localhost:3000](http://localhost:3000) in your browser.
+```bash
+npm install
+```
+
+### 3. Configure Environment Variables
+
+Create a `.env.local` file in the project root:
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+
+BREVO_API_KEY=your_brevo_api_key
+BREVO_SENDER_EMAIL=your_sender_email
+```
+
+### 4. Start the Development Server
+
+```bash
+npm run dev
+```
+
+Open:
+
+```text
+http://localhost:3000
+```
 
 ---
 
-## 🤖 AI Agent Workflow
+## AI Agent Workflow
 
-**Where the AI agent got something wrong, and how I caught and fixed it:**
-During development, the AI agent made two notable mistakes that required intervention. First, it configured CSS variables for the Tailwind v4 color theme incorrectly by dropping the `hsl()` wrapper, which caused backgrounds and buttons to render completely invisible (transparent). I caught this by noticing the missing UI elements on the dashboard and directed the agent to use explicit hex codes in the new Tailwind v4 `@theme` directive. Second, when setting up the bookmark deletion, the agent used the `deleteBookmark(id)` signature inside a React 19 `useActionState` hook. Since `useActionState` passes the previous state as the first argument, it resulted in a database crash (`invalid input syntax for type uuid: "null"`). I analyzed the crash logs, identified the signature mismatch, and had the agent rewrite the action to correctly extract the ID from the `formData`.
+I used Gemini CLI throughout development, primarily for UI ideation, frontend refinement, implementation reviews, and debugging assistance. Since I was using the free tier, I focused AI usage on accelerating repetitive development tasks while manually implementing, testing, and validating the application's core functionality, authentication flow, database design, deployment setup, and security rules.
 
-## 💡 Future Improvements
+I treated AI as a development assistant rather than a source of truth. Every significant suggestion was verified against documentation, runtime behavior, and the actual database configuration before being applied.
 
-**One thing I'd improve with more time:**
-I would implement metadata scraping. When a user pastes a URL, the app would automatically fetch the OpenGraph tags (title, description, and preview image) in the background so the user doesn't have to manually type out the bookmark title, making the saving experience entirely frictionless.
+### Examples of AI Mistakes and How I Corrected Them
+
+#### 1. React 19 `useActionState` Signature Mismatch
+
+The AI generated a server action using a `deleteBookmark(id)` signature. However, React 19's `useActionState` passes the previous state as the first argument, which caused invalid UUID errors during bookmark deletion.
+
+**How I fixed it:**
+I inspected the server logs, identified the argument mismatch, and updated the action to extract the bookmark ID from `FormData`.
+
+---
+
+#### 2. Next.js Cookie API Compatibility
+
+The AI generated middleware code using:
+
+```ts
+request.cookies.set(name, value, options)
+```
+
+which is not compatible with the current Next.js cookie API and resulted in TypeScript errors.
+
+**How I fixed it:**
+I reviewed the Next.js documentation and updated the implementation to use the correct response cookie API.
+
+---
+
+#### 3. Invalid Library Import
+
+The AI imported `Github` from `lucide-react`, but that icon does not exist in the installed version of the library.
+
+**How I fixed it:**
+I reviewed the available exports, identified the invalid import, and replaced it with a valid icon component.
+
+---
+
+#### 4. Security Review False Positives
+
+The AI reported several Supabase security vulnerabilities, including a missing `WITH CHECK` clause and missing unique handle constraints.
+
+**How I fixed it:**
+Rather than accepting the findings directly, I inspected the live database using `pg_policies` and constraint queries. The protections were already present, and the findings were based on historical project snapshots rather than the current database configuration.
+
+---
+
+These situations reinforced the importance of validating AI-generated output and understanding the underlying technologies instead of blindly accepting generated code.
+
+---
+
+## Security
+
+This project uses Supabase Row Level Security (RLS) to enforce data ownership and privacy.
+
+* Users can only create bookmarks for themselves.
+* Users can only update their own bookmarks.
+* Users can only delete their own bookmarks.
+* Private bookmarks are visible only to their owner.
+* Public profile pages expose only public bookmarks.
+* User handles are protected by a database-level unique constraint.
+
+---
+
+## Future Improvements
+
+Given more time, I would implement:
+
+* Bookmark categories and tagging
+* Bookmark preview cards using OpenGraph metadata
+* Drag-and-drop bookmark organization
+* Bookmark analytics for public profiles
+* Advanced search and filtering
+
+---
+
+## Agent Sessions
+
+Entire CLI was used throughout development to record AI-assisted coding sessions, as requested in the assignment.
+
+Session checkpoints, prompts, and development history are available in the:
+
+```text
+entire/checkpoints/v1
+```
+
+branch of this repository.
+
+The recorded sessions include:
+
+* Authentication implementation and Supabase integration
+* Bookmark CRUD development
+* Public profile and handle routing
+* Responsive UI redesign
+* Security reviews and RLS verification
+* Deployment and production debugging
+* AI-generated code review and corrections
+
+These sessions demonstrate both the use of AI tooling and the process of validating, correcting, and improving AI-generated suggestions during development.
