@@ -1,0 +1,5 @@
+I am seeing:AuthApiError: Invalid Refresh Token: Refresh Token Not Foundinside my Next.js 16 + Supabase SSR middleware/proxy.The app still loads successfully and routes return 200.Please review whether this is:1. A harmless development warning caused by missing cookies.2. A bug in my middleware/proxy implementation.3. A session refresh issue.Provide the safest fix and explain whether this would affect production.
+
+---
+
+change middleware.ts accordingly

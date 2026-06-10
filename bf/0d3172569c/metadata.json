@@ -1,0 +1,18 @@
+{
+  "cli_version": "0.7.5",
+  "checkpoint_id": "bf0d3172569c",
+  "strategy": "manual-commit",
+  "branch": "main",
+  "checkpoints_count": 1,
+  "files_touched": [
+    "middleware.ts"
+  ],
+  "sessions": [
+    {
+      "metadata": "/bf/0d3172569c/0/metadata.json",
+      "transcript": "/bf/0d3172569c/0/full.jsonl",
+      "content_hash": "/bf/0d3172569c/0/content_hash.txt",
+      "prompt": "/bf/0d3172569c/0/prompt.txt"
+    }
+  ]
+}
